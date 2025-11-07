@@ -12,7 +12,6 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            // 🔹 Фон
             Image("chuck")
                 .resizable(resizingMode: .stretch)
                 .ignoresSafeArea()
