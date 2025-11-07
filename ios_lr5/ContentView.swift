@@ -12,33 +12,44 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
+            // 🔹 Фон
             Image("chuck")
                 .resizable(resizingMode: .stretch)
                 .ignoresSafeArea()
+            
             ScrollView {
-                VStack {
+                VStack(spacing: 20) {
                     Text("Chuck Norris Facts")
                         .foregroundColor(.white)
-                        .font(.system(size: 20, weight: .heavy))
+                        .font(.system(size: 24, weight: .heavy))
                         .italic()
                         .underline()
-                        .background(.black.opacity(0.7))
+                        .padding(.top)
+                        .background(.black.opacity(0.6))
+                        .cornerRadius(8)
                     
                     if viewModel.isLoading {
-                        ProgressView("Завантаження...")
-                    } else if let joke = viewModel.currentJoke {
+                        ProgressView("Loading...")
+                            .tint(.white)
+                            .padding()
+                    }
+                    else if let joke = viewModel.currentJoke {
                         Text(joke.value)
                             .foregroundColor(.white)
-                            .font(.system(size: 20, weight: .heavy))
-                            .background(.black.opacity(0.7))
+                            .font(.system(size: 20, weight: .medium))
                             .padding()
+                            .background(.black.opacity(0.6))
+                            .cornerRadius(12)
                             .multilineTextAlignment(.center)
-                    } else if let error = viewModel.errorMessage {
-                        Text("Помилка: \(error)")
-                            .foregroundColor(.red)
-                    } else {
-                        Text("Натисни кнопку, щоб отримати факт!")
-                            .foregroundColor(.gray)
+                            .padding(.horizontal)
+                    }
+                    else {
+                        Text("Press the button to get a new fact!")
+                            .foregroundColor(.white.opacity(0.8))
+                            .font(.system(size: 18))
+                            .padding()
+                            .background(.black.opacity(0.6))
+                            .cornerRadius(8)
                     }
                     
                     Button(action: {
@@ -46,14 +57,27 @@ struct ContentView: View {
                     }) {
                         Text("Get a New Fact")
                             .padding()
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
                             .background(Color.green.opacity(0.7))
                             .foregroundColor(.white)
                             .cornerRadius(10)
+                            .padding(.horizontal)
                     }
                     
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .font(.headline)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.black.opacity(0.7))
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+                    }
                 }
+                .padding(.vertical, 20)
             }
-            .padding()
             .onAppear {
                 viewModel.loadJoke()
             }

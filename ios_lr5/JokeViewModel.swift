@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 @MainActor
 class JokeViewModel: ObservableObject {
     @Published var currentJoke: Joke?
@@ -27,7 +26,11 @@ class JokeViewModel: ObservableObject {
                 case .success(let joke):
                     self?.currentJoke = joke
                 case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
+                    if (error as? URLError)?.code == .notConnectedToInternet {
+                        self?.errorMessage = "No Internet Connection"
+                    } else {
+                        self?.errorMessage = "Error: \(error.localizedDescription)"
+                    }
                 }
             }
         }
